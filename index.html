@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Figuras de Linguagem</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body {
+            background: #0f172a; color: #f1f5f9; min-height: 100vh;
+            display: flex; align-items: center; justify-content: center; padding: 16px;
+        }
+       .game {
+            background: #1e293b; border: 1px solid #334155; border-radius: 20px;
+            padding: 28px; max-width: 500px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 { font-size: 22px; text-align: center; margin-bottom: 8px; font-weight: 800; }
+       .sub { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 24px; }
+       .score { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px; font-weight: 600; }
+       .score span { background: #0f172a; padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+       .card {
+            background: #0f172a; border: 1px solid #334155; border-radius: 16px;
+            padding: 24px; margin-bottom: 20px; min-height: 180px;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+       .pergunta { font-size: 16px; color: #cbd5e1; margin-bottom: 12px; text-align: center; }
+       .exemplo {
+            font-size: 20px; font-weight: 700; text-align: center; color: #fff;
+            background: #3b82f6; padding: 16px; border-radius: 12px; margin-bottom: 8px;
+        }
+       .dica { font-size: 13px; text-align: center; color: #94a3b8; font-style: italic; }
+       .opcoes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+       .btn {
+            background: #334155; border: 1px solid #475569; color: #f1f5f9;
+            padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 600;
+            font-size: 14px; transition: all 0.2s;
+        }
+       .btn:hover { background: #475569; transform: translateY(-1px); }
+       .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+       .btn.certo { background: #16a34a; border-color: #22c55e; }
+       .btn.errado { background: #dc2626; border-color: #ef4444; }
+       .feedback {
+            text-align: center; font-weight: 700; margin-bottom: 16px;
+            min-height: 24px; font-size: 16px;
+        }
+       .feedback.certo { color: #22c55e; }
+       .feedback.errado { color: #ef4444; }
+       .controles { display: flex; gap: 10px; }
+       .btn-prox {
+            background: #3b82f6; border: none; flex: 1;
+        }
+       .btn-prox:hover { background: #2563eb; }
+       .final {
+            text-align: center; padding: 20px;
+        }
+       .final h2 { font-size: 28px; margin-bottom: 12px; }
+       .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="game">
+        <h1>🎯 Figuras de Linguagem</h1>
+        <p class="sub">Qual é a figura usada no exemplo?</p>
+
+        <div class="score">
+            <span>Acertos: <b id="acertos">0</b></span>
+            <span>Questão: <b id="atual">1</b>/18</span>
+        </div>
+
+        <div id="tela-jogo">
+            <div class="card">
+                <div class="pergunta">Identifique a figura:</div>
+                <div class="exemplo" id="exemplo"></div>
+                <div class="dica" id="dica"></div>
+            </div>
+
+            <div class="opcoes" id="opcoes"></div>
+            <div class="feedback" id="feedback"></div>
+
+            <div class="controles">
+                <button class="btn btn-prox hidden" id="btnProx" onclick="proximaQuestao()">Próxima →</button>
+            </div>
+        </div>
+
+        <div id="tela-final" class="final hidden">
+            <h2 id="resultado-emoji">🏆</h2>
+            <h2 id="resultado-texto"></h2>
+            <p style="color: #94a3b8; margin: 16px 0;" id="resultado-msg"></p>
+            <button class="btn btn-prox" onclick="reiniciar()">Jogar de Novo</button>
+        </div>
+    </div>
+
+    <script>
+        const FIGURAS = [
+            { nome: "Aliteração", def: "Repetição de consoantes", ex: "O RATO ROEU A ROUPA..." },
+            { nome: "Anáfora", def: "Repetição no início", ex: "É PAU, É PEDRA, É O FIM..." },
+            { nome: "Antítese", def: "Termos opostos", ex: "CORPO GRANDE, ALMA PEQUENA." },
+            { nome: "Assonância", def: "Repetição de vogais", ex: "ANA AMA SUA CAMA." },
+            { nome: "Catacrese", def: "Termo 'emprestado'", ex: "ELE EMBARCOU NO AVIÃO." },
+            { nome: "Elipse", def: "Omissão de termo", ex: "CHEGAMOS CEDO. (NÓS)" },
+            { nome: "Eufemismo", def: "Suavização", ex: "ELE FALTOU COM A VERDADE." },
+            { nome: "Hipérbato", def: "Inversão da ordem direta", ex: "ESTÁ PRONTA A COMIDA." },
+            { nome: "Hipérbole", def: "Exagero", ex: "ESTOU MORRENDO DE MEDO." },
+            { nome: "Ironia", def: "Dizer o contrário", ex: "TÃO INTELIGENTE QUE REPROVOU." },
+            { nome: "Metáfora", def: "Sentido figurado", ex: "MINHA FILHA É UMA FLOR." },
+            { nome: "Metonímia", def: "Substituição lógica", ex: "GOSTO DE LER STEPHEN KING." },
+            { nome: "Onomatopeia", def: "Imitar som ou ruído", ex: "OS SINOS FAZIAM BLEM, BLEM." },
+            { nome: "Paradoxo", def: "Termos contraditórios", ex: "O SOM DO SILÊNCIO." },
+            { nome: "Pleonasmo", def: "Redundância intencional", ex: "CHOVIA UMA TRISTE CHUVA." },
+            { nome: "Prosopopeia", def: "Humanizar seres inanimados", ex: "AS PEDRAS ANDAM DEVAGAR." },
+            { nome: "Sinestesia", def: "Mistura de sentidos", ex: "O DOCE SOM DA SUA VOZ." },
+            { nome: "Zeugma", def: "Omissão de termo já citado", ex: "COMI PIZZA; ELE, CARNE." }
+        ];
+
+        let embaralhadas = [];
+        let indice = 0;
+        let acertos = 0;
+        let respondeu = false;
+
+        function embaralhar(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function iniciar() {
+            embaralhadas = embaralhar(FIGURAS);
+            indice = 0;
+            acertos = 0;
+            mostrarQuestao();
+        }
+
+        function mostrarQuestao() {
+            respondeu = false;
+            const atual = embaralhadas[indice];
+            document.getElementById('exemplo').textContent = atual.ex;
+            document.getElementById('dica').textContent = atual.def;
+            document.getElementById('atual').textContent = indice + 1;
+            document.getElementById('acertos').textContent = acertos;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('btnProx').classList.add('hidden');
+
+            // Gera 4 opções: 1 certa + 3 erradas aleatórias
+            let opcoes = [atual.nome];
+            let outras = FIGURAS.filter(f => f.nome!== atual.nome);
+            outras = embaralhar(outras).slice(0, 3);
+            opcoes = embaralhar([...opcoes,...outras.map(f => f.nome)]);
+
+            const opcoesDiv = document.getElementById('opcoes');
+            opcoesDiv.innerHTML = '';
+            opcoes.forEach(op => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.textContent = op;
+                btn.onclick = () => verificar(op, btn);
+                opcoesDiv.appendChild(btn);
+            });
+        }
+
+        function verificar(resposta, btn) {
+            if (respondeu) return;
+            respondeu = true;
+            const correta = embaralhadas[indice].nome;
+            const botoes = document.querySelectorAll('.opcoes.btn');
+
+            botoes.forEach(b => {
+                b.disabled = true;
+                if (b.textContent === correta) b.classList.add('certo');
+                else if (b === btn) b.classList.add('errado');
+            });
+
+            const feedback = document.getElementById('feedback');
+            if (resposta === correta) {
+                acertos++;
+                feedback.textContent = '✅ Acertou!';
+                feedback.className = 'feedback certo';
+            } else {
+                feedback.textContent = `❌ Era: ${correta}`;
+                feedback.className = 'feedback errado';
+            }
+
+            document.getElementById('acertos').textContent = acertos;
+            document.getElementById('btnProx').classList.remove('hidden');
+        }
+
+        function proximaQuestao() {
+            indice++;
+            if (indice < embaralhadas.length) {
+                mostrarQuestao();
+            } else {
+                mostrarFinal();
+            }
+        }
+
+        function mostrarFinal() {
+            document.getElementById('tela-jogo').classList.add('hidden');
+            document.getElementById('tela-final').classList.remove('hidden');
+
+            const pct = Math.round(acertos / 18 * 100);
+            let emoji = '😅';
+            let msg = 'Continue praticando!';
+
+            if (pct === 100) { emoji = '🏆'; msg = 'Perfeito! Você dominou todas!'; }
+            else if (pct >= 80) { emoji = '🔥'; msg = 'Mandou muito bem!'; }
+            else if (pct >= 60) { emoji = '👍'; msg = 'Tá no caminho!'; }
+
+            document.getElementById('resultado-emoji').textContent = emoji;
+            document.getElementById('resultado-texto').textContent = `${acertos}/18 acertos (${pct}%)`;
+            document.getElementById('resultado-msg').textContent = msg;
+        }
+
+        function reiniciar() {
+            document.getElementById('tela-final').classList.add('hidden');
+            document.getElementById('tela-jogo').classList.remove('hidden');
+            iniciar();
+        }
+
+        // Inicia o jogo
+        iniciar();
+    </script>
+</body>
+</html>
