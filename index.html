@@ -3,71 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz: Figuras de Linguagem</title>
+    <title>Quiz: Figuras de Linguagem Completo</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         body {
             background: #0f172a; color: #f1f5f9; min-height: 100vh;
             display: flex; align-items: center; justify-content: center; padding: 16px;
         }
-       .game {
+      .game {
             background: #1e293b; border: 1px solid #334155; border-radius: 20px;
             padding: 28px; max-width: 500px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         h1 { font-size: 22px; text-align: center; margin-bottom: 8px; font-weight: 800; }
-       .sub { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 24px; }
-       .score { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px; font-weight: 600; }
-       .score span { background: #0f172a; padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
-       .card {
+      .sub { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
+      .score { display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 13px; font-weight: 600; }
+      .score span { background: #0f172a; padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+      .badge-tipo {
+            text-align: center; margin-bottom: 12px;
+        }
+      .badge-tipo span {
+            background: #3b82f6; color: white; padding: 6px 14px; border-radius: 20px;
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+      .badge-tipo.som span { background: #8b5cf6; }
+      .badge-tipo.palavra span { background: #f59e0b; }
+      .badge-tipo.pensamento span { background: #10b981; }
+      .card {
             background: #0f172a; border: 1px solid #334155; border-radius: 16px;
             padding: 24px; margin-bottom: 20px; min-height: 180px;
             display: flex; flex-direction: column; justify-content: center;
         }
-       .pergunta { font-size: 16px; color: #cbd5e1; margin-bottom: 12px; text-align: center; }
-       .exemplo {
-            font-size: 20px; font-weight: 700; text-align: center; color: #fff;
+      .pergunta { font-size: 16px; color: #cbd5e1; margin-bottom: 12px; text-align: center; }
+      .exemplo {
+            font-size: 18px; font-weight: 700; text-align: center; color: #fff;
             background: #3b82f6; padding: 16px; border-radius: 12px; margin-bottom: 8px;
         }
-       .dica { font-size: 13px; text-align: center; color: #94a3b8; font-style: italic; }
-       .opcoes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-       .btn {
+      .dica { font-size: 13px; text-align: center; color: #94a3b8; font-style: italic; }
+      .opcoes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+      .btn {
             background: #334155; border: 1px solid #475569; color: #f1f5f9;
-            padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 600;
-            font-size: 14px; transition: all 0.2s;
+            padding: 14px 10px; border-radius: 12px; cursor: pointer; font-weight: 600;
+            font-size: 13px; transition: all 0.2s;
         }
-       .btn:hover { background: #475569; transform: translateY(-1px); }
-       .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-       .btn.certo { background: #16a34a; border-color: #22c55e; }
-       .btn.errado { background: #dc2626; border-color: #ef4444; }
-       .feedback {
+      .btn:hover { background: #475569; transform: translateY(-1px); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .btn.certo { background: #16a34a; border-color: #22c55e; }
+      .btn.errado { background: #dc2626; border-color: #ef4444; }
+      .feedback {
             text-align: center; font-weight: 700; margin-bottom: 16px;
             min-height: 24px; font-size: 16px;
         }
-       .feedback.certo { color: #22c55e; }
-       .feedback.errado { color: #ef4444; }
-       .controles { display: flex; gap: 10px; }
-       .btn-prox {
-            background: #3b82f6; border: none; flex: 1;
+      .feedback.certo { color: #22c55e; }
+      .feedback.errado { color: #ef4444; }
+      .controles { display: flex; gap: 10px; }
+      .btn-prox { background: #3b82f6; border: none; flex: 1; }
+      .btn-prox:hover { background: #2563eb; }
+      .final { text-align: center; padding: 20px; }
+      .final h2 { font-size: 28px; margin-bottom: 12px; }
+      .hidden { display: none; }
+      .filtro { display: flex; gap: 8px; margin-bottom: 20px; }
+      .btn-filtro {
+            flex: 1; padding: 10px; font-size: 12px; background: #0f172a;
+            border: 1px solid #334155;
         }
-       .btn-prox:hover { background: #2563eb; }
-       .final {
-            text-align: center; padding: 20px;
-        }
-       .final h2 { font-size: 28px; margin-bottom: 12px; }
-       .hidden { display: none; }
+      .btn-filtro.ativo { background: #3b82f6; border-color: #3b82f6; }
     </style>
 </head>
 <body>
     <div class="game">
         <h1>🎯 Figuras de Linguagem</h1>
-        <p class="sub">Qual é a figura usada no exemplo?</p>
+        <p class="sub">30 figuras separadas por categoria</p>
+
+        <div class="filtro">
+            <button class="btn btn-filtro ativo" onclick="filtrar('todas')">Todas</button>
+            <button class="btn btn-filtro" onclick="filtrar('som')">Som</button>
+            <button class="btn btn-filtro" onclick="filtrar('palavra')">Palavra</button>
+            <button class="btn btn-filtro" onclick="filtrar('pensamento')">Pensamento</button>
+        </div>
 
         <div class="score">
             <span>Acertos: <b id="acertos">0</b></span>
-            <span>Questão: <b id="atual">1</b>/18</span>
+            <span>Questão: <b id="atual">1</b>/<b id="total">30</b></span>
         </div>
 
         <div id="tela-jogo">
+            <div class="badge-tipo" id="badge-tipo"><span></span></div>
             <div class="card">
                 <div class="pergunta">Identifique a figura:</div>
                 <div class="exemplo" id="exemplo"></div>
@@ -91,31 +111,50 @@
     </div>
 
     <script>
-        const FIGURAS = [
-            { nome: "Aliteração", def: "Repetição de consoantes", ex: "O RATO ROEU A ROUPA..." },
-            { nome: "Anáfora", def: "Repetição no início", ex: "É PAU, É PEDRA, É O FIM..." },
-            { nome: "Antítese", def: "Termos opostos", ex: "CORPO GRANDE, ALMA PEQUENA." },
-            { nome: "Assonância", def: "Repetição de vogais", ex: "ANA AMA SUA CAMA." },
-            { nome: "Catacrese", def: "Termo 'emprestado'", ex: "ELE EMBARCOU NO AVIÃO." },
-            { nome: "Elipse", def: "Omissão de termo", ex: "CHEGAMOS CEDO. (NÓS)" },
-            { nome: "Eufemismo", def: "Suavização", ex: "ELE FALTOU COM A VERDADE." },
-            { nome: "Hipérbato", def: "Inversão da ordem direta", ex: "ESTÁ PRONTA A COMIDA." },
-            { nome: "Hipérbole", def: "Exagero", ex: "ESTOU MORRENDO DE MEDO." },
-            { nome: "Ironia", def: "Dizer o contrário", ex: "TÃO INTELIGENTE QUE REPROVOU." },
-            { nome: "Metáfora", def: "Sentido figurado", ex: "MINHA FILHA É UMA FLOR." },
-            { nome: "Metonímia", def: "Substituição lógica", ex: "GOSTO DE LER STEPHEN KING." },
-            { nome: "Onomatopeia", def: "Imitar som ou ruído", ex: "OS SINOS FAZIAM BLEM, BLEM." },
-            { nome: "Paradoxo", def: "Termos contraditórios", ex: "O SOM DO SILÊNCIO." },
-            { nome: "Pleonasmo", def: "Redundância intencional", ex: "CHOVIA UMA TRISTE CHUVA." },
-            { nome: "Prosopopeia", def: "Humanizar seres inanimados", ex: "AS PEDRAS ANDAM DEVAGAR." },
-            { nome: "Sinestesia", def: "Mistura de sentidos", ex: "O DOCE SOM DA SUA VOZ." },
-            { nome: "Zeugma", def: "Omissão de termo já citado", ex: "COMI PIZZA; ELE, CARNE." }
+        const TODAS_FIGURAS = [
+            // 1. FIGURAS DE SOM
+            { nome: "Aliteração", def: "Repetição de consoantes", ex: "O RATO ROEU A ROUPA...", tipo: "som" },
+            { nome: "Assonância", def: "Repetição de vogais", ex: "ANA AMA SUA CAMA.", tipo: "som" },
+            { nome: "Onomatopeia", def: "Imitar som ou ruído", ex: "OS SINOS FAZIAM BLEM, BLEM.", tipo: "som" },
+            { nome: "Paronomásia", def: "Palavras parecidas, sentido diferente", ex: "Com DISCRIÇÃO e sem DESCRIÇÃO.", tipo: "som" },
+
+            // 2. FIGURAS DE PALAVRA / CONSTRUÇÃO
+            { nome: "Anáfora", def: "Repetição no início", ex: "É PAU, É PEDRA, É O FIM...", tipo: "palavra" },
+            { nome: "Elipse", def: "Omissão de termo", ex: "CHEGAMOS CEDO. (NÓS)", tipo: "palavra" },
+            { nome: "Zeugma", def: "Omissão de termo já citado", ex: "COMI PIZZA; ELE, CARNE.", tipo: "palavra" },
+            { nome: "Hipérbato", def: "Inversão da ordem direta", ex: "ESTÁ PRONTA A COMIDA.", tipo: "palavra" },
+            { nome: "Anástrofe", def: "Inversão simples adj + subst", ex: "TÃO GRANDE ERA O MEDO.", tipo: "palavra" },
+            { nome: "Pleonasmo", def: "Redundância intencional", ex: "CHOVIA UMA TRISTE CHUVA.", tipo: "palavra" },
+            { nome: "Silepse", def: "Concordância com a ideia", ex: "A MAIORIA VOTARAM CONTRA.", tipo: "palavra" },
+            { nome: "Anacoluto", def: "Quebra da estrutura sintática", ex: "EU, PARECE QUE A PROVA FOI DIFÍCIL.", tipo: "palavra" },
+            { nome: "Polissíndeto", def: "Repetição da conjunção", ex: "E CORRE, E GRITA, E CHORA.", tipo: "palavra" },
+            { nome: "Assíndeto", def: "Ausência de conjunção", ex: "CHEGUEI, VI, VENCI.", tipo: "palavra" },
+            { nome: "Catacrese", def: "Termo 'emprestado'", ex: "ELE EMBARCOU NO AVIÃO.", tipo: "palavra" },
+
+            // 3. FIGURAS DE PENSAMENTO
+            { nome: "Antítese", def: "Termos opostos", ex: "CORPO GRANDE, ALMA PEQUENA.", tipo: "pensamento" },
+            { nome: "Paradoxo", def: "Termos contraditórios", ex: "O SOM DO SILÊNCIO.", tipo: "pensamento" },
+            { nome: "Eufemismo", def: "Suavização", ex: "ELE FALTOU COM A VERDADE.", tipo: "pensamento" },
+            { nome: "Hipérbole", def: "Exagero", ex: "ESTOU MORRENDO DE MEDO.", tipo: "pensamento" },
+            { nome: "Ironia", def: "Dizer o contrário", ex: "TÃO INTELIGENTE QUE REPROVOU.", tipo: "pensamento" },
+            { nome: "Metáfora", def: "Sentido figurado", ex: "MINHA FILHA É UMA FLOR.", tipo: "pensamento" },
+            { nome: "Metonímia", def: "Substituição lógica", ex: "GOSTO DE LER STEPHEN KING.", tipo: "pensamento" },
+            { nome: "Prosopopeia", def: "Humanizar seres inanimados", ex: "AS PEDRAS ANDAM DEVAGAR.", tipo: "pensamento" },
+            { nome: "Sinestesia", def: "Mistura de sentidos", ex: "O DOCE SOM DA SUA VOZ.", tipo: "pensamento" },
+            { nome: "Gradação", def: "Ideias em ordem crescente/decrescente", ex: "UM MINUTO, UMA HORA, UM DIA, UMA VIDA.", tipo: "pensamento" },
+            { nome: "Apóstrofe", def: "Chamamento/invocação", ex: "Ó MAR SALGADO, QUANTO DO TEU SAL...", tipo: "pensamento" },
+            { nome: "Preterição", def: "Finge que não vai falar, mas fala", ex: "NÃO VOU FALAR DOS ERROS, MAS ELE MENTIU.", tipo: "pensamento" },
+            { nome: "Comparação", def: "Compara com 'como, tal qual'", ex: "É FORTE COMO UM TOURO.", tipo: "pensamento" },
+            { nome: "Perífrase", def: "Troca nome por característica", ex: "A CIDADE MARAVILHOSA.", tipo: "pensamento" },
+            { nome: "Litotes", def: "Afirmar pela negação do contrário", ex: "ELE NÃO É BURRO.", tipo: "pensamento" }
         ];
 
+        let FIGURAS = [...TODAS_FIGURAS];
         let embaralhadas = [];
         let indice = 0;
         let acertos = 0;
         let respondeu = false;
+        let filtroAtual = 'todas';
 
         function embaralhar(array) {
             let arr = [...array];
@@ -124,6 +163,18 @@
                 [arr[i], arr[j]] = [arr[j], arr[i]];
             }
             return arr;
+        }
+
+        function filtrar(tipo) {
+            filtroAtual = tipo;
+            document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('ativo'));
+            event.target.classList.add('ativo');
+
+            if (tipo === 'todas') FIGURAS = [...TODAS_FIGURAS];
+            else FIGURAS = TODAS_FIGURAS.filter(f => f.tipo === tipo);
+
+            document.getElementById('total').textContent = FIGURAS.length;
+            reiniciar();
         }
 
         function iniciar() {
@@ -136,6 +187,13 @@
         function mostrarQuestao() {
             respondeu = false;
             const atual = embaralhadas[indice];
+
+            // Badge do tipo
+            const badge = document.getElementById('badge-tipo');
+            badge.className = `badge-tipo ${atual.tipo}`;
+            const nomes = { som: 'Figura de Som', palavra: 'Figura de Palavra/Construção', pensamento: 'Figura de Pensamento' };
+            badge.querySelector('span').textContent = nomes[atual.tipo];
+
             document.getElementById('exemplo').textContent = atual.ex;
             document.getElementById('dica').textContent = atual.def;
             document.getElementById('atual').textContent = indice + 1;
@@ -144,7 +202,6 @@
             document.getElementById('feedback').className = 'feedback';
             document.getElementById('btnProx').classList.add('hidden');
 
-            // Gera 4 opções: 1 certa + 3 erradas aleatórias
             let opcoes = [atual.nome];
             let outras = FIGURAS.filter(f => f.nome!== atual.nome);
             outras = embaralhar(outras).slice(0, 3);
@@ -165,7 +222,7 @@
             if (respondeu) return;
             respondeu = true;
             const correta = embaralhadas[indice].nome;
-            const botoes = document.querySelectorAll('.opcoes.btn');
+            const botoes = document.querySelectorAll('#opcoes.btn');
 
             botoes.forEach(b => {
                 b.disabled = true;
@@ -200,7 +257,8 @@
             document.getElementById('tela-jogo').classList.add('hidden');
             document.getElementById('tela-final').classList.remove('hidden');
 
-            const pct = Math.round(acertos / 18 * 100);
+            const total = FIGURAS.length;
+            const pct = Math.round(acertos / total * 100);
             let emoji = '😅';
             let msg = 'Continue praticando!';
 
@@ -209,7 +267,7 @@
             else if (pct >= 60) { emoji = '👍'; msg = 'Tá no caminho!'; }
 
             document.getElementById('resultado-emoji').textContent = emoji;
-            document.getElementById('resultado-texto').textContent = `${acertos}/18 acertos (${pct}%)`;
+            document.getElementById('resultado-texto').textContent = `${acertos}/${total} acertos (${pct}%)`;
             document.getElementById('resultado-msg').textContent = msg;
         }
 
@@ -219,7 +277,6 @@
             iniciar();
         }
 
-        // Inicia o jogo
         iniciar();
     </script>
 </body>
